@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+
 class Reporter(ABC):
     # Base of datasource
     def __init__(self, config: dict = None):

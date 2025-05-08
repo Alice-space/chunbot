@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from source.base import Source
 
+
 class IHEPEDUSource(Source):
     def description(self):
         return "高能物理研究所教育处通知公告"
@@ -19,10 +20,3 @@ class IHEPEDUSource(Source):
                 link = "https://edu1.ihep.ac.cn" + link
             items[title] = link
         return items
-
-    def get_detail(self, url):
-        return url
-
-if __name__ == "__main__":
-    ihep_edu = IHEPEDUSource()
-    print(ihep_edu.get_list())

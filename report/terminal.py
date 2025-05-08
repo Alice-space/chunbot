@@ -1,5 +1,6 @@
 from report.base import Reporter
 
+
 class TerminalReporter(Reporter):
     # Base of datasource
     def __init__(self, config: dict = None):
