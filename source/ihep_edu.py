@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from base import Source
+from source.base import Source
 
 class IHEPEDUSource(Source):
     def get_list(self) -> dict[str, str]:
