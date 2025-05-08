@@ -16,6 +16,7 @@ class SQLiteStore(Store):
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS news (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
+                description TEXT NOT NULL,
                 title TEXT UNIQUE NOT NULL,
                 url TEXT NOT NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -24,11 +25,11 @@ class SQLiteStore(Store):
         self.conn.commit()
         cursor.close()
 
-    def update_list(self, news: dict[str, str]) -> dict[str, str]:
+    def update_list(self, source_description: str, news: dict[str, str]) -> dict[str, str]:
         cursor = self.conn.cursor()
         
         # Get existing titles
-        cursor.execute("SELECT title FROM news")
+        cursor.execute("SELECT title FROM news WHERE description = ?", (source_description,))
         existing_titles = {row[0] for row in cursor.fetchall()}
         
         # Find new entries
@@ -42,8 +43,8 @@ class SQLiteStore(Store):
         if new_entries:
             local_time = datetime.now(pytz.timezone('Asia/Shanghai'))
             cursor.executemany(
-                "INSERT INTO news (title, url, created_at) VALUES (?, ?, ?)",
-                [(title, url, local_time) for title, url in new_entries.items()]
+                "INSERT INTO news (description, title, url, created_at) VALUES (?, ?, ?, ?)",
+                [(source_description, title, url, local_time) for title, url in new_entries.items()]
             )
             self.conn.commit()
             

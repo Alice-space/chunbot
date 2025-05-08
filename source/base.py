@@ -6,6 +6,10 @@ class Source(ABC):
         self.config = config or {}
 
     @abstractmethod
+    def description(self) -> str:
+        pass
+
+    @abstractmethod
     def get_list(self) -> dict[str, str]:
         # key: title, value: url
         pass

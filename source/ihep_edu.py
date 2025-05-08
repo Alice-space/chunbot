@@ -3,6 +3,9 @@ from bs4 import BeautifulSoup
 from source.base import Source
 
 class IHEPEDUSource(Source):
+    def description(self):
+        return "高能物理研究所教育处通知公告"
+
     def get_list(self) -> dict[str, str]:
         resp = requests.get("https://edu1.ihep.ac.cn/tzgg/index.shtml")
         resp.raise_for_status()
@@ -18,7 +21,7 @@ class IHEPEDUSource(Source):
         return items
 
     def get_detail(self, url):
-        return super().get_detail(url)
+        return url
 
 if __name__ == "__main__":
     ihep_edu = IHEPEDUSource()

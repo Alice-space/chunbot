@@ -1,11 +1,12 @@
 from abc import ABC, abstractmethod
 
-class Store(ABC):
+class Reporter(ABC):
     # Base of datasource
     def __init__(self, config: dict = None):
         self.config = config or {}
 
     @abstractmethod
-    def update_list(self, source_description: str, news: dict[str, str]) -> dict[str, str]:
-        # key: title, value: url, which is new
+    def report(self, compiled_info: str) -> None:
+        # key: title, value: url
+        # return report passage
         pass
