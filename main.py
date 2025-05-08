@@ -16,8 +16,8 @@ if __name__ == "__main__":
         source_desp = source.description()
         news = store.update_list(source_desp, source.get_list())
         for title, url in news.items():
-            summary_single = compiler.compile_info(source_desp, title, url)
-            compiled_info.append((source_desp, title, summary_single, url))
+            summary_single, importance = compiler.compile_info(source_desp, title, url)
+            compiled_info.append((source_desp, title, summary_single, importance, url))
     final_report = compiler.compile_list(compiled_info)
     for reporter in reporters:
         reporter.report(final_report)
