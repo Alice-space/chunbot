@@ -76,6 +76,4 @@ def html_to_markdown(info: str) -> str:
 
 
 def format_item(item: News) -> str:
-    return (
-        f"- [{item['title']}]({item['url']}) ({item['source']}): {item['summary']}"
-    )
+    return f"- [{item['title']}]({item['url']}) ({item['source']}){f": {item['summary']}" if item['summary'] else ""}"
