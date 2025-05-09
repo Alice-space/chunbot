@@ -3,7 +3,7 @@ from report.base import Reporter, ReporterConfig
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-
+import markdown
 
 class MailReporterConfig(ReporterConfig):
     smtp_server: str
@@ -27,7 +27,8 @@ class MailReporter(Reporter):
             f"今日简报 - {datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=8))).strftime('%m月%d日')}"
         )
 
-        msg.attach(MIMEText(compiled_info, "plain"))
+        html_content = markdown.markdown(compiled_info)
+        msg.attach(MIMEText(html_content, "html"))
 
         try:
             with smtplib.SMTP_SSL(
