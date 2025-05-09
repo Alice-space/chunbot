@@ -1,24 +1,24 @@
 from abc import ABC, abstractmethod
-import requests
+from typing import Optional, TypedDict
+
+from type import News
+
+
+class CompilerConfig(TypedDict):
+    pass
 
 
 class Compiler(ABC):
     # Base of datasource
-    def __init__(self, config: dict = None):
-        self.config = config or {}
+    def __init__(self, config: Optional[CompilerConfig] = None):
+        self.config = config
 
     @abstractmethod
-    def compile_info(self, source_description: str, title: str, url: str) -> tuple[str, str]:
+    def compile_info(self, news: News) -> News:
         # key: title, value: url
         # return report passage, importance
         pass
 
     @abstractmethod
-    def compile_list(self, info_list: list[tuple[str, str, str]]) -> str:
-        # source, title, summary
+    def compile_list(self, news: list[News]) -> str:
         pass
-
-    def get_info(self, url: str) -> str:
-        resp = requests.get(url)
-        resp.raise_for_status()
-        return resp.text

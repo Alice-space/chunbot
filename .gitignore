@@ -1,2 +1,7 @@
 __pycache__/
 store.sqlite
+.env
+*.log
+test.sqlite
+.mypy_cache
+.pytest_cache

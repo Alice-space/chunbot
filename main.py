@@ -4,20 +4,44 @@ from store.sqlite import SQLiteStore
 from report.terminal import TerminalReporter
 from report.base import Reporter
 from compile.LLM import LLMCompiler
+import os
+import logging
+
+from type import News
 
 if __name__ == "__main__":
-    sources: list[Source] = [IHEPEDUSource()]
-    store = SQLiteStore()
-    compiler = LLMCompiler()
-    reporters: list[Reporter] = [TerminalReporter()]
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format="%(asctime)s - %(levelname)s - %(message)s",
+        handlers=[logging.FileHandler("app.log"), logging.StreamHandler()],
+    )
+    logger = logging.getLogger(__name__)
 
-    compiled_info = []
-    for source in sources:
-        source_desp = source.description()
-        news = store.update_list(source_desp, source.get_list())
-        for title, url in news.items():
-            summary_single, importance = compiler.compile_info(source_desp, title, url)
-            compiled_info.append((source_desp, title, summary_single, importance, url))
-    final_report = compiler.compile_list(compiled_info)
-    for reporter in reporters:
-        reporter.report(final_report)
+    try:
+        logger.info("Starting application")
+        sources: list[Source] = [IHEPEDUSource()]
+        store = SQLiteStore()
+        compiler = LLMCompiler({"personal_info": os.getenv("PERSONAL_INFO", "")})
+        reporters: list[Reporter] = [TerminalReporter()]
+
+        compiled_info: list[News] = []
+        for source in sources:
+            if not source.config:
+                logger.warning(f"Skipping source with no config")
+                continue
+            logger.info(f"Processing source: {source.config['description']}")
+            news = store.update_list(source.get_list())
+            logger.info(
+                f"Found {len(news)} new items from {source.config['description']}"
+            )
+            for single_news in news:
+                logger.debug(f"Processing item: {single_news['title']}")
+                result = compiler.compile_info(single_news)
+                compiled_info.append(result)
+            logger.info(f"Compiled {len(compiled_info)} items total")
+        final_report = compiler.compile_list(compiled_info)
+        for reporter in reporters:
+            reporter.report(final_report)
+        logger.info("Application completed successfully")
+    except Exception as e:
+        logger.error(f"Application failed: {str(e)}", exc_info=True)
