@@ -57,7 +57,7 @@ class LLMCompiler(Compiler):
                 logger.error(f"No Importance detected: {news['title']}")
                 return news
             else:
-                print(response.message.content)
+                # print(response.message.content)
                 importance = find_importance(response.message.content)
                 news["importance"] = importance
                 if importance == "无关":
@@ -82,7 +82,7 @@ class LLMCompiler(Compiler):
                 logger.error(f"No URL detected: {news['title']}")
                 return news
             detail_info = remove_think_tags(html_to_markdown(get_info(news["url"])))
-            print(detail_info)
+            # print(detail_info)
         except Exception as e:
             news["success"] = False
             news["error_msg"] = "解析详情错误"
@@ -112,7 +112,7 @@ class LLMCompiler(Compiler):
                 news["error_msg"] = "获取总结错误"
                 logger.error(f"Parse summary info error: {news['title']}")
                 return news
-            print(summary_response.message.content)
+            # print(summary_response.message.content)
             summary = extract_code_blocks(summary_response.message.content)
             news["summary"] = summary
         except Exception as e:
