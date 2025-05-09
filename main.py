@@ -22,16 +22,16 @@ if __name__ == "__main__":
         logger.info("Starting application")
         sources: list[Source] = [IHEPEDUSource()]
         store = SQLiteStore()
-        compiler = LLMCompiler({"personal_info": Config.personal_info})
+        compiler = LLMCompiler({"personal_info": Config["personal_info"]})
         reporters: list[Reporter] = [
             TerminalReporter(),
             MailReporter(
                 {
-                    "recipient_emails": Config.recipient_emails,
-                    "sender_email": Config.sender_email,
-                    "sender_password": Config.sender_password,
-                    "smtp_port": Config.smtp_port,
-                    "smtp_server": Config.smtp_server,
+                    "recipient_emails": Config['recipient_emails'],
+                    "sender_email": Config['sender_email'],
+                    "sender_password": Config['sender_password'],
+                    "smtp_port": Config['smtp_port'],
+                    "smtp_server": Config['smtp_server'],
                 }
             ),
         ]
