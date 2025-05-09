@@ -5,3 +5,4 @@ store.sqlite
 test.sqlite
 .mypy_cache
 .pytest_cache
+config.yaml

@@ -1,0 +1,8 @@
+personal_info: 我是小学生
+
+recipient_emails:
+  - '你的邮件'
+sender_email: 邮件地址
+sender_password: 邮箱密码
+smtp_port: 465
+smtp_server: smtpdm.aliyun.com

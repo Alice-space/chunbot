@@ -7,6 +7,5 @@ def test_get_list():
         'sender_password': '',
         'smtp_port': 465,
         'smtp_server': '',
-        'subject': "Hi",
     })
     r.report("test")

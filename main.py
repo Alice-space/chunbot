@@ -1,10 +1,11 @@
+from config import Config
+from report.email import MailReporter
 from source.ihep_edu import IHEPEDUSource
 from source.base import Source
 from store.sqlite import SQLiteStore
 from report.terminal import TerminalReporter
 from report.base import Reporter
 from compile.LLM import LLMCompiler
-import os
 import logging
 
 from type import News
@@ -21,8 +22,19 @@ if __name__ == "__main__":
         logger.info("Starting application")
         sources: list[Source] = [IHEPEDUSource()]
         store = SQLiteStore()
-        compiler = LLMCompiler({"personal_info": os.getenv("PERSONAL_INFO", "")})
-        reporters: list[Reporter] = [TerminalReporter()]
+        compiler = LLMCompiler({"personal_info": Config.personal_info})
+        reporters: list[Reporter] = [
+            TerminalReporter(),
+            MailReporter(
+                {
+                    "recipient_emails": Config.recipient_emails,
+                    "sender_email": Config.sender_email,
+                    "sender_password": Config.sender_password,
+                    "smtp_port": Config.smtp_port,
+                    "smtp_server": Config.smtp_server,
+                }
+            ),
+        ]
 
         compiled_info: list[News] = []
         for source in sources:
