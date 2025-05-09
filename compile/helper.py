@@ -1,5 +1,6 @@
 import logging
 from typing import Sequence
+from bs4 import BeautifulSoup
 from ollama import ChatResponse, Message, chat  # type: ignore
 import requests
 import re
@@ -12,7 +13,8 @@ logger = logging.getLogger(__name__)
 def get_info(url: str) -> str:
     resp = requests.get(url)
     resp.raise_for_status()
-    return resp.text
+    soup = BeautifulSoup(resp.text, "html.parser")
+    return soup.getText()
 
 
 def extract_code_blocks(text: str) -> str:
